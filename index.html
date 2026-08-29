@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mis Tarjetas">
+<meta name="theme-color" content="#1B2A4A">
+<title>Calendario de Tarjetas — Erika</title>
+<style>
+  :root{
+    --paper:#F7F4EC;
+    --ink:#1B2A4A;
+    --ink-soft:#4A5670;
+    --gold:#B8860B;
+    --gold-soft:#E9D9A8;
+    --line:#DAD3C0;
+    --danger:#B3441E;
+    --blue:#1554C1;
+    --card-bg:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    color:var(--ink);padding:0 0 60px;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 14px;}
+
+  /* Top bar */
+  .topbar{
+    display:flex;justify-content:space-between;align-items:center;
+    max-width:640px;margin:0 auto;padding:16px 14px;position:relative;box-sizing:border-box;
+  }
+  .topbar .brand{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;}
+  .menu-btn{
+    background:var(--card-bg);border:1px solid var(--line);border-radius:8px;
+    width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:18px;color:var(--ink);flex-shrink:0;
+  }
+  .menu-panel{
+    position:absolute;top:56px;right:14px;background:var(--card-bg);border:1px solid var(--line);
+    border-radius:10px;box-shadow:0 4px 14px rgba(27,42,74,.15);overflow:hidden;z-index:20;display:none;min-width:200px;
+  }
+  .menu-panel.open{display:block;}
+  .menu-item{padding:13px 16px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;border-bottom:1px solid var(--line);}
+  .menu-item:last-child{border-bottom:none;}
+  .menu-item:active{background:var(--paper);}
+
+  header{margin-bottom:22px;}
+  .eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:4px;}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:24px;margin:0 0 4px;line-height:1.2;}
+  .subtitle{font-size:13px;color:var(--ink-soft);}
+  .today-badge{
+    display:inline-block;margin-top:10px;background:var(--ink);color:var(--paper);
+    font-size:12px;padding:5px 12px;border-radius:20px;font-weight:600;
+  }
+  section{margin-bottom:28px;}
+  h2{font-family:Georgia,serif;font-size:16px;margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line);}
+
+  .page{display:none;}
+  .page.active{display:block;}
+
+  /* Form */
+  .form-card{background:var(--card-bg);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(27,42,74,.08);}
+  .field-row{display:flex;gap:8px;margin-bottom:10px;}
+  .field{flex:1;display:flex;flex-direction:column;gap:4px;}
+  .field label{font-size:11px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em;}
+  .field input{
+    padding:10px;border-radius:8px;border:1px solid var(--line);font-size:14px;color:var(--ink);background:var(--paper);
+  }
+  .checkbox-row{
+    display:flex;align-items:center;gap:9px;padding:11px 4px;margin-bottom:10px;
+  }
+  .checkbox-row input{width:18px;height:18px;flex-shrink:0;}
+  .checkbox-row label{font-size:13.5px;font-weight:600;color:var(--ink);}
+  .checkbox-row .hint{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);margin-top:1px;}
+  .add-btn{
+    width:100%;padding:11px;border-radius:8px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);
+    font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;
+  }
+  .finalize-btn{
+    width:100%;padding:14px;border-radius:9px;border:none;background:var(--ink);color:var(--paper);
+    font-size:15px;font-weight:700;cursor:pointer;margin-top:18px;
+  }
+  .finalize-btn:active,.add-btn:active{opacity:.85;}
+
+  .pending-list{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+  .pending-item{
+    display:flex;justify-content:space-between;align-items:center;background:var(--card-bg);
+    border-radius:8px;padding:10px 12px;font-size:13px;box-shadow:0 1px 3px rgba(27,42,74,.06);
+  }
+  .pending-item b{font-weight:700;}
+  .pending-item span.meta{color:var(--ink-soft);font-size:11.5px;display:block;}
+  .etoro-badge{
+    display:inline-block;margin-top:3px;font-size:10px;font-weight:700;background:var(--gold-soft);
+    color:#7A5D0A;padding:1px 7px;border-radius:20px;
+  }
+  .remove-x{background:none;border:none;color:var(--danger);font-size:18px;font-weight:700;cursor:pointer;line-height:1;}
+
+  /* Card list (calendar page) */
+  .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .card-tile{
+    background:var(--card-bg);border-radius:10px;padding:12px 12px 14px;
+    border-left:5px solid var(--gold);box-shadow:0 1px 3px rgba(27,42,74,.08);
+  }
+  .card-name{font-size:14px;font-weight:700;margin:0 0 10px;}
+  .row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--ink-soft);}
+  .row b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;}
+  .empty-msg{font-size:13px;color:var(--ink-soft);padding:14px;text-align:center;background:var(--card-bg);border-radius:10px;}
+
+  /* Tabs */
+  .tabs{display:flex;gap:8px;margin-bottom:16px;}
+  .tab-btn{
+    flex:1;padding:10px 8px;border-radius:9px;border:1px solid var(--line);
+    background:var(--card-bg);font-size:13px;font-weight:700;color:var(--ink-soft);
+    cursor:pointer;text-align:center;transition:.15s;
+  }
+  .tab-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+
+  .month-selector{display:flex;gap:8px;align-items:center;margin-bottom:14px;}
+  .month-selector select{
+    flex:1;padding:9px 10px;border-radius:8px;border:1px solid var(--line);
+    background:var(--card-bg);font-size:14px;color:var(--ink);font-weight:600;-webkit-appearance:none;appearance:none;
+  }
+
+  .cal-card{background:var(--card-bg);border-radius:12px;padding:14px;box-shadow:0 1px 3px rgba(27,42,74,.08);margin-bottom:14px;}
+  .weekday-row{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px;}
+  .weekday-row span{text-align:center;font-size:10.5px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;}
+  .day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+  .day-cell{
+    aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;
+    border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer;border:1.5px solid transparent;transition:.12s;
+  }
+  .day-cell:hover{border-color:var(--gold);}
+  .day-cell.empty{visibility:hidden;cursor:default;}
+  .day-cell.today{border-color:var(--ink);}
+  .day-cell.selected{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+
+  .detail{background:var(--card-bg);border-radius:10px;padding:14px 14px 16px;box-shadow:0 1px 3px rgba(27,42,74,.08);}
+  .detail-date{font-size:12px;color:var(--ink-soft);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+  .detail-pick{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:6px 0 10px;}
+  .pick-name{font-family:Georgia,serif;font-size:19px;font-weight:700;}
+  .pick-margin{background:var(--gold-soft);color:#7A5D0A;font-size:12px;font-weight:700;padding:2px 9px;border-radius:20px;}
+  .detail-all{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
+  .mini-row{display:flex;justify-content:space-between;font-size:12.5px;padding:7px 10px;border-radius:6px;background:#FAF8F2;}
+  .mini-row.winner{background:var(--gold-soft);font-weight:700;}
+  .mini-row span:first-child{color:var(--ink-soft);}
+  .mini-row.winner span:first-child{color:var(--ink);}
+  .mini-row b{font-variant-numeric:tabular-nums;}
+  .mini-sub{font-size:10.5px;font-weight:400;color:var(--ink-soft);display:block;margin-top:1px;}
+
+  .note{font-size:12.5px;color:var(--ink-soft);line-height:1.55;background:#FAF8F2;border-radius:10px;padding:14px;border:1px solid var(--line);}
+  .note b{color:var(--ink);}
+
+  .reminder-card{background:var(--card-bg);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(27,42,74,.08);}
+  .reminder-btn{
+    width:100%;padding:13px;border-radius:9px;border:none;background:var(--blue);color:#FFFFFF;
+    font-size:14.5px;font-weight:700;cursor:pointer;
+  }
+  .reminder-btn:active{opacity:.85;}
+  .reminder-note{font-size:11.5px;color:var(--ink-soft);margin-top:10px;line-height:1.5;}
+  .install-btn{
+    width:100%;padding:12px;border-radius:9px;border:1px solid var(--ink);background:var(--card-bg);color:var(--ink);
+    font-size:13.5px;font-weight:700;cursor:pointer;margin-top:10px;
+  }
+  .install-btn:active{opacity:.8;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">Erika · Tarjetas de crédito</div>
+  <div style="position:relative;">
+    <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+    <div class="menu-panel" id="menuPanel">
+      <div class="menu-item" onclick="goTo('form')">Agregar tarjetas</div>
+      <div class="menu-item" onclick="goTo('calendar')">Ver calendario</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ================= PÁGINA 1: FORMULARIO ================= -->
+  <div class="page" id="page-form">
+    <header>
+      <h1>Tus tarjetas</h1>
+      <div class="subtitle">Agrega, edita o quita tarjetas cuando quieras</div>
+    </header>
+
+    <section>
+      <h2>Agregar tarjeta</h2>
+      <div class="form-card">
+        <div class="field-row">
+          <div class="field">
+            <label>Nombre de la tarjeta</label>
+            <input type="text" id="inpName" placeholder="Ej: BBVA Visa Signature">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Día de cierre (1-31)</label>
+            <input type="number" id="inpClose" min="1" max="31" placeholder="Ej: 10">
+          </div>
+          <div class="field">
+            <label>Días hasta el pago</label>
+            <input type="number" id="inpOffset" min="1" max="45" placeholder="Ej: 28">
+          </div>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="inpEtoro">
+          <label for="inpEtoro">Uso esta tarjeta para depositar en eToro
+            <span class="hint">Solo márcala si eToro la acepta (en tu caso: BBVA y Scotiabank)</span>
+          </label>
+        </div>
+        <button class="add-btn" onclick="addCard()">+ Agregar tarjeta</button>
+      </div>
+
+      <div class="pending-list" id="pendingList"></div>
+    </section>
+
+    <button class="finalize-btn" onclick="finalizeForm()">Finalizar y ver mi calendario</button>
+  </div>
+
+  <!-- ================= PÁGINA 2: CALENDARIO ================= -->
+  <div class="page" id="page-calendar">
+    <header>
+      <h1>Calendario de cierres y pagos</h1>
+      <div class="subtitle" id="cardNamesLine">—</div>
+      <div class="today-badge" id="todayBadge">Hoy: —</div>
+    </header>
+
+    <section>
+      <h2>Mis Tarjetas</h2>
+      <div class="cards-grid" id="cardsGrid"></div>
+    </section>
+
+    <section>
+      <h2>Calendario interactivo — elige un día</h2>
+      <div class="tabs">
+        <button class="tab-btn active" id="tabEtoro" onclick="setTab('etoro')">Para eToro<br><span style="font-weight:400;font-size:11px;" id="etoroTabSub">—</span></button>
+        <button class="tab-btn" id="tabCompras" onclick="setTab('compras')">Para mis compras<br><span style="font-weight:400;font-size:11px;">Todas mis tarjetas</span></button>
+      </div>
+      <div class="month-selector">
+        <select id="monthSelect" onchange="renderCalendar()"></select>
+        <select id="yearSelect" onchange="renderCalendar()"></select>
+      </div>
+      <div class="cal-card">
+        <div class="weekday-row"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+        <div class="day-grid" id="dayGrid"></div>
+      </div>
+      <div class="detail" id="detailPanel"></div>
+    </section>
+
+    <section>
+      <div class="note" id="noteEtoro">
+        <b>Regla de eToro: 30 días desde el depósito para devolver el dinero a la tarjeta.</b>
+        Esa cuenta regresiva es igual sin importar la tarjeta. Lo que cambia entre tus tarjetas habilitadas es la fecha en que ese cargo te toca pagar al banco — eso te da un colchón extra por si la jugada toma unos días más de lo planeado.
+      </div>
+      <div class="note" id="noteCompras" style="display:none;">
+        <b>Aquí no aplica la regla de eToro — es el periodo de gracia normal de cada tarjeta.</b>
+        Para cualquier compra, la tarjeta más conveniente es la que te da más días entre la fecha de compra y la fecha en que te toca pagar sin generar intereses.
+      </div>
+    </section>
+
+    <section>
+      <h2>Recordatorios automáticos</h2>
+      <div class="reminder-card">
+        <button class="reminder-btn" onclick="downloadICS()">Recuérdalo en tu calendario</button>
+        <div class="reminder-note">
+          Descarga un archivo con la fecha de pago de todas tus tarjetas para los próximos 12 meses, con dos avisos automáticos: 3 días antes y 1 día antes, a las 12:00 pm. Optimizado para <b>iPhone (Apple Calendario)</b>. Si cambias algo, primero elimina el calendario importado en Ajustes → Calendario → Cuentas, y vuelve a darle a este botón.
+        </div>
+        <button class="install-btn" onclick="tryInstall()">Agregar a inicio / favoritos</button>
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<script>
+const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
+const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+let viewYear = today.getFullYear(), viewMonth = today.getMonth();
+let selectedDate = new Date(today);
+let activeTab = 'etoro';
+let cards = {}; // { id: {name, closeDay, dueOffset, etoro:bool} }
+
+/* ---------- Colores por banco ---------- */
+const bankColorMap = [
+  {keys:['interbank'], color:'#0B6B3A'},
+  {keys:['bcp'], color:'#E8871E'},
+  {keys:['bbva'], color:'#1554C1'},
+  {keys:['scotiabank','scotia'], color:'#D32F2F'},
+  {keys:['ripley'], color:'#6B3FA0'},
+  {keys:['cmr','falabella'], color:'#7CB342'},
+  {keys:['banbif'], color:'#29B6F6'},
+  {keys:['diners'], color:'#6B7280'},
+  {keys:['oeschle','oechsle','financiera oh','oh'], color:'#7A1F1F'},
+  {keys:['cencosud'], color:'#F4A300'},
+  {keys:['io'], color:'#111111'}
+];
+const fallbackColors = ['#8D6E63','#00897B','#5D4037','#3949AB','#C2185B','#00838F','#827717','#4E342E'];
+let fallbackIndex = 0;
+const colorCache = {};
+function getCardColor(name){
+  if(colorCache[name]) return colorCache[name];
+  const norm = name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  for(const entry of bankColorMap){
+    const hit = entry.keys.some(k => new RegExp('\\b'+k+'\\b').test(norm));
+    if(hit){ colorCache[name]=entry.color; return entry.color; }
+  }
+  const c = fallbackColors[fallbackIndex % fallbackColors.length];
+  fallbackIndex++;
+  colorCache[name]=c;
+  return c;
+}
+
+/* ---------- Utilidades ---------- */
+function fmtDate(d){
+  return d.getDate() + ' ' + monthNames[d.getMonth()].slice(0,3).toLowerCase() + ' ' + d.getFullYear();
+}
+function getCycleInfo(date, closeDay, dueOffset){
+  const y = date.getFullYear(), m = date.getMonth(), day = date.getDate();
+  let cycleClose = (day <= closeDay) ? new Date(y, m, closeDay) : new Date(y, m+1, closeDay);
+  let dueDate = new Date(cycleClose);
+  dueDate.setDate(dueDate.getDate() + dueOffset);
+  let marginDays = Math.round((dueDate - date) / 86400000);
+  return {cycleClose, dueDate, marginDays};
+}
+
+/* ---------- Persistencia local + datos por defecto ---------- */
+function seedDefaults(){
+  cards = {
+    c1:{name:'BBVA Visa Signature', closeDay:10, dueOffset:28, etoro:true},
+    c2:{name:'Interbank Platinum',  closeDay:26, dueOffset:26, etoro:false},
+    c3:{name:'Diners Club DC Miles',closeDay:9,  dueOffset:23, etoro:false},
+    c4:{name:'Scotiabank Visa Infinite', closeDay:24, dueOffset:28, etoro:true}
+  };
+  saveState();
+}
+function saveState(){ localStorage.setItem('tarjetas_erika', JSON.stringify(cards)); }
+function loadState(){
+  const raw = localStorage.getItem('tarjetas_erika');
+  if(raw){ try{ cards = JSON.parse(raw); }catch(e){ seedDefaults(); } }
+  else{ seedDefaults(); }
+}
+
+/* ---------- Menú y navegación ---------- */
+function toggleMenu(){ document.getElementById('menuPanel').classList.toggle('open'); }
+function goTo(page){
+  document.getElementById('menuPanel').classList.remove('open');
+  document.getElementById('page-form').classList.toggle('active', page==='form');
+  document.getElementById('page-calendar').classList.toggle('active', page==='calendar');
+  if(page==='form') renderPendingList();
+  if(page==='calendar') renderCalendarPage();
+}
+document.addEventListener('click', (e)=>{
+  const panel = document.getElementById('menuPanel');
+  const btn = document.querySelector('.menu-btn');
+  if(panel.classList.contains('open') && !panel.contains(e.target) && e.target!==btn){
+    panel.classList.remove('open');
+  }
+});
+
+/* ---------- Formulario ---------- */
+function addCard(){
+  const name = document.getElementById('inpName').value.trim();
+  const closeDay = parseInt(document.getElementById('inpClose').value);
+  const dueOffset = parseInt(document.getElementById('inpOffset').value);
+  const etoro = document.getElementById('inpEtoro').checked;
+  if(!name || !closeDay || closeDay<1 || closeDay>31 || !dueOffset || dueOffset<1){
+    alert('Completa el nombre, un día de cierre (1-31) y los días hasta el pago.');
+    return;
+  }
+  const id = 't_' + Date.now();
+  cards[id] = {name, closeDay, dueOffset, etoro};
+  saveState();
+  document.getElementById('inpName').value='';
+  document.getElementById('inpClose').value='';
+  document.getElementById('inpOffset').value='';
+  document.getElementById('inpEtoro').checked=false;
+  renderPendingList();
+}
+function removeCard(id){
+  delete cards[id];
+  saveState();
+  renderPendingList();
+}
+function renderPendingList(){
+  const list = document.getElementById('pendingList');
+  const ids = Object.keys(cards);
+  if(ids.length===0){ list.innerHTML='<div class="empty-msg">Aún no tienes tarjetas agregadas.</div>'; return; }
+  list.innerHTML = ids.map(id=>{
+    const c = cards[id];
+    return `<div class="pending-item">
+      <div><b>${c.name}</b><span class="meta">Cierra día ${c.closeDay} · Pago a los ${c.dueOffset} días</span>
+        ${c.etoro ? '<span class="etoro-badge">eToro</span>' : ''}
+      </div>
+      <button class="remove-x" onclick="removeCard('${id}')">×</button>
+    </div>`;
+  }).join('');
+}
+function finalizeForm(){
+  if(Object.keys(cards).length===0){ alert('Agrega al menos una tarjeta.'); return; }
+  saveState();
+  goTo('calendar');
+}
+
+/* ---------- Página calendario ---------- */
+function renderCalendarPage(){
+  document.getElementById('cardNamesLine').textContent = Object.values(cards).map(c=>c.name).join(' · ');
+  document.getElementById('todayBadge').textContent =
+    'Hoy: ' + today.getDate() + ' de ' + monthNames[today.getMonth()].toLowerCase() + ', ' + today.getFullYear();
+  const etoroNames = Object.values(cards).filter(c=>c.etoro).map(c=>c.name.split(' ')[0]);
+  document.getElementById('etoroTabSub').textContent = etoroNames.length ? etoroNames.join(' + ') : 'Ninguna marcada';
+  renderCardsGrid();
+  populateSelectors();
+  renderCalendar();
+  renderDetail();
+}
+
+function renderCardsGrid(){
+  const grid = document.getElementById('cardsGrid');
+  const ids = Object.keys(cards);
+  if(ids.length===0){
+    grid.innerHTML = '<div class="empty-msg" style="grid-column:1/-1;">Aún no has agregado tarjetas.</div>';
+    return;
+  }
+  grid.innerHTML = ids.map(id=>{
+    const c = cards[id];
+    const info = getCycleInfo(today, c.closeDay, c.dueOffset);
+    return `<div class="card-tile" style="border-left-color:${getCardColor(c.name)}">
+      <div class="card-name">${c.name}${c.etoro ? ' <span class="etoro-badge">eToro</span>' : ''}</div>
+      <div class="row"><span>Cierra</span><b>día ${c.closeDay}</b></div>
+      <div class="row"><span>Próx. cierre</span><b>${fmtDate(info.cycleClose)}</b></div>
+      <div class="row"><span>Pago</span><b>${fmtDate(info.dueDate)}</b></div>
+    </div>`;
+  }).join('');
+}
+
+function setTab(tab){
+  activeTab = tab;
+  document.getElementById('tabEtoro').classList.toggle('active', tab==='etoro');
+  document.getElementById('tabCompras').classList.toggle('active', tab==='compras');
+  document.getElementById('noteEtoro').style.display = tab==='etoro' ? 'block' : 'none';
+  document.getElementById('noteCompras').style.display = tab==='compras' ? 'block' : 'none';
+  renderDetail();
+}
+
+function populateSelectors(){
+  const ms = document.getElementById('monthSelect');
+  ms.innerHTML = '';
+  monthNames.forEach((m,i)=>{
+    const opt = document.createElement('option');
+    opt.value=i; opt.textContent=m;
+    if(i===viewMonth) opt.selected=true;
+    ms.appendChild(opt);
+  });
+  const ys = document.getElementById('yearSelect');
+  ys.innerHTML = '';
+  const y0 = today.getFullYear();
+  for(let y=y0; y<=y0+2; y++){
+    const opt = document.createElement('option');
+    opt.value=y; opt.textContent=y;
+    if(y===viewYear) opt.selected=true;
+    ys.appendChild(opt);
+  }
+}
+
+function renderCalendar(){
+  viewMonth = parseInt(document.getElementById('monthSelect').value);
+  viewYear = parseInt(document.getElementById('yearSelect').value);
+  const grid = document.getElementById('dayGrid');
+  grid.innerHTML = '';
+  const firstDow = (new Date(viewYear, viewMonth, 1).getDay() + 6) % 7;
+  const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+
+  for(let i=0;i<firstDow;i++){
+    const c = document.createElement('div');
+    c.className='day-cell empty';
+    grid.appendChild(c);
+  }
+  for(let d=1; d<=daysInMonth; d++){
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    cell.textContent = d;
+    const cellDate = new Date(viewYear, viewMonth, d);
+    if(cellDate.getTime() === today.getTime()) cell.classList.add('today');
+    if(selectedDate.getFullYear()===viewYear && selectedDate.getMonth()===viewMonth && selectedDate.getDate()===d){
+      cell.classList.add('selected');
+    }
+    cell.onclick = () => {
+      selectedDate = new Date(viewYear, viewMonth, d);
+      renderCalendar();
+      renderDetail();
+    };
+    grid.appendChild(cell);
+  }
+}
+
+function renderDetail(){
+  const panel = document.getElementById('detailPanel');
+  let ids = Object.keys(cards);
+  if(activeTab==='etoro') ids = ids.filter(id=>cards[id].etoro);
+  if(ids.length===0){
+    panel.innerHTML = activeTab==='etoro'
+      ? '<div class="empty-msg">No tienes ninguna tarjeta marcada para eToro. Ve a "Agregar tarjetas" y marca la casilla correspondiente.</div>'
+      : '<div class="empty-msg">Agrega al menos una tarjeta para ver la recomendación.</div>';
+    return;
+  }
+  const results = ids.map(id=>{
+    const c = cards[id];
+    const info = getCycleInfo(selectedDate, c.closeDay, c.dueOffset);
+    return {name:c.name, margin:info.marginDays, due:info.dueDate};
+  }).sort((a,b)=>b.margin-a.margin);
+
+  const maxMargin = results[0].margin;
+  const winners = results.filter(r=>r.margin===maxMargin).map(r=>r.name);
+
+  let html = `<div class="detail-date">${fmtDate(selectedDate)}</div>`;
+  html += `<div class="detail-pick">
+              <span class="pick-name">${winners.join(' o ')}</span>
+              <span class="pick-margin">${maxMargin} días de margen</span>
+            </div>`;
+  html += `<div class="detail-all">`;
+  results.forEach(r=>{
+    const isWinner = r.margin===maxMargin;
+    html += `<div class="mini-row ${isWinner?'winner':''}">
+               <span>${r.name}<span class="mini-sub">paga el ${fmtDate(r.due)}</span></span>
+               <b>${r.margin} días</b>
+             </div>`;
+  });
+  html += `</div>`;
+  panel.innerHTML = html;
+}
+
+/* ---------- Generar y descargar .ics ---------- */
+function pad(n){ return n<10 ? '0'+n : ''+n; }
+function icsDateTime(d, hour, min){
+  return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(hour)}${pad(min)}00`;
+}
+function icsStamp(){
+  const d = new Date();
+  return `${d.getUTCFullYear()}${pad(d.getUTCMonth()+1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
+}
+function slug(s){ return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-'); }
+
+function getUpcomingDueDates(closeDay, dueOffset, count){
+  const dates = [];
+  const day = today.getDate();
+  let cycleClose = (day <= closeDay) ? new Date(today.getFullYear(), today.getMonth(), closeDay)
+                                      : new Date(today.getFullYear(), today.getMonth()+1, closeDay);
+  for(let i=0;i<count;i++){
+    const due = new Date(cycleClose);
+    due.setDate(due.getDate() + dueOffset);
+    dates.push(due);
+    cycleClose = new Date(cycleClose.getFullYear(), cycleClose.getMonth()+1, closeDay);
+  }
+  return dates;
+}
+
+function downloadICS(){
+  const ids = Object.keys(cards);
+  if(ids.length===0){ alert('Agrega al menos una tarjeta antes de generar el calendario.'); return; }
+  let ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Calendario de Tarjetas Erika//ES\r\nCALSCALE:GREGORIAN\r\n';
+
+  ids.forEach(id=>{
+    const c = cards[id];
+    const dueDates = getUpcomingDueDates(c.closeDay, c.dueOffset, 12);
+    dueDates.forEach(due=>{
+      const uid = `${slug(c.name)}-${due.getFullYear()}${pad(due.getMonth()+1)}${pad(due.getDate())}@erika-tarjetas`;
+      const dtStart = icsDateTime(due, 12, 0);
+      const dtEndDate = new Date(due); dtEndDate.setMinutes(dtEndDate.getMinutes()+30);
+      const dtEnd = icsDateTime(dtEndDate, 12, 30);
+      ics += 'BEGIN:VEVENT\r\n';
+      ics += `UID:${uid}\r\n`;
+      ics += `DTSTAMP:${icsStamp()}\r\n`;
+      ics += `DTSTART:${dtStart}\r\n`;
+      ics += `DTEND:${dtEnd}\r\n`;
+      ics += `SUMMARY:Pago ${c.name} vence hoy\r\n`;
+      ics += `DESCRIPTION:Recordatorio de pago para tu tarjeta ${c.name}.\r\n`;
+      ics += 'BEGIN:VALARM\r\nACTION:DISPLAY\r\nDESCRIPTION:Recordatorio de pago\r\nTRIGGER:-P3D\r\nEND:VALARM\r\n';
+      ics += 'BEGIN:VALARM\r\nACTION:DISPLAY\r\nDESCRIPTION:Recordatorio de pago\r\nTRIGGER:-P1D\r\nEND:VALARM\r\n';
+      ics += 'END:VEVENT\r\n';
+    });
+  });
+
+  ics += 'END:VCALENDAR\r\n';
+  const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'recordatorios-tarjetas-erika.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ---------- Agregar a inicio / favoritos ---------- */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+function tryInstall(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.finally(()=>{ deferredPrompt = null; });
+    return;
+  }
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  if(isIOS){
+    alert('En iPhone/iPad: toca el ícono de compartir (el cuadrito con la flecha hacia arriba) en la barra de Safari, y elige "Agregar a pantalla de inicio".');
+  } else {
+    alert('Busca el ícono de instalar (⊕ o una pantalla con flecha) al costado derecho de la barra de direcciones. Si no aparece, abre el menú (⋮ o ···) del navegador y busca "Instalar app" o "Agregar a favoritos".');
+  }
+}
+
+/* ---------- Init ---------- */
+loadState();
+goTo('calendar');
+</script>
+</body>
+</html>
