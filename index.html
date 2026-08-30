@@ -57,22 +57,25 @@
   #page-cover{
     background-image:url('fondo-portada.jpg');
     background-size:cover;background-position:top center;background-repeat:no-repeat;
-    min-height:100vh;position:relative;
+    min-height:100vh;position:relative;overflow:hidden;
   }
   .cover-hero{
-    padding:70px 24px 60px;text-align:center;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
-    position:relative;z-index:1;
+    padding-top:13vh;text-align:center;position:relative;z-index:3;
   }
-  .cover-icon img{width:100%;max-width:300px;display:block;margin:0 auto;}
   .cover-title{
-    font-weight:900;font-size:30px;color:#fff;line-height:1.28;margin:0;max-width:340px;
+    font-weight:900;font-size:30px;color:#fff;line-height:1.28;margin:0 auto;max-width:340px;
   }
+  .cover-icon{
+    position:absolute;top:42vh;left:50%;transform:translateX(-50%);
+    width:82%;max-width:330px;z-index:2;
+  }
+  .cover-icon img{width:100%;display:block;}
   .cover-bottom{
-    background:#fff;border-radius:48px 48px 0 0;margin-top:-46px;position:relative;z-index:2;
-    padding:46px 24px 54px;text-align:center;
+    position:absolute;top:63vh;left:0;right:0;bottom:0;
+    background:#fff;border-radius:48px 48px 0 0;z-index:1;
+    padding:17.5vh 24px 40px;text-align:center;
   }
-  .cover-subtitle{font-weight:700;color:var(--navy);font-size:18px;line-height:1.45;margin:0 0 26px;max-width:320px;margin-left:auto;margin-right:auto;}
+  .cover-subtitle{font-weight:700;color:var(--navy);font-size:18px;line-height:1.45;margin:0 0 9vh;max-width:320px;margin-left:auto;margin-right:auto;}
   .cta-btn{
     background:var(--navy);color:#fff;border:none;padding:16px 44px;border-radius:30px;
     font-weight:700;font-size:16px;cursor:pointer;font-family:inherit;
@@ -256,10 +259,10 @@
 <!-- ================= PORTADA ================= -->
 <div class="page active" id="page-cover">
   <div class="cover-hero">
-    <div class="cover-icon">
-      <img src="tarjeta.png" alt="Tarjetas">
-    </div>
     <h1 class="cover-title">Tus fechas de corte<br>y pago bajo control</h1>
+  </div>
+  <div class="cover-icon">
+    <img src="tarjeta.png" alt="Tarjetas">
   </div>
   <div class="cover-bottom">
     <p class="cover-subtitle">Organiza tus tarjetas y<br>aprovéchalas al máximo</p>
