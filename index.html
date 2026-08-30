@@ -6,16 +6,20 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Mis Tarjetas">
-<meta name="theme-color" content="#1B2A4A">
+<meta name="theme-color" content="#1E198E">
 <title>Calendario de Tarjetas — Erika</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F7F4EC;
-    --ink:#1B2A4A;
-    --ink-soft:#4A5670;
-    --gold:#B8860B;
-    --gold-soft:#E9D9A8;
-    --line:#DAD3C0;
+    --navy:#1E198E;
+    --violet:#4F3CDB;
+    --lavender:#F4F3FA;
+    --paper:#FFFFFF;
+    --ink:#1E198E;
+    --ink-soft:#6B7280;
+    --line:#E4E2F0;
     --danger:#B3441E;
     --blue:#1554C1;
     --card-bg:#FFFFFF;
@@ -23,7 +27,7 @@
   *{box-sizing:border-box;}
   body{
     margin:0;background:var(--paper);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    font-family:'Roboto',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     color:var(--ink);padding:0 0 60px;
   }
   .wrap{max-width:640px;margin:0 auto;padding:0 14px;}
@@ -33,181 +37,207 @@
     display:flex;justify-content:space-between;align-items:center;
     max-width:640px;margin:0 auto;padding:16px 14px;position:relative;box-sizing:border-box;
   }
-  .topbar .brand{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;}
+  .topbar .brand{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--violet);font-weight:700;}
   .menu-btn{
-    background:var(--card-bg);border:1px solid var(--line);border-radius:8px;
-    width:38px;height:38px;display:flex;align-items:center;justify-content:center;
-    cursor:pointer;font-size:18px;color:var(--ink);flex-shrink:0;
+    background:#fff;border:1px solid var(--line);border-radius:50%;
+    width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;flex-shrink:0;box-shadow:0 1px 4px rgba(30,25,142,.10);
   }
+  .menu-btn svg{width:18px;height:18px;color:var(--navy);}
   .menu-panel{
-    position:absolute;top:56px;right:14px;background:var(--card-bg);border:1px solid var(--line);
-    border-radius:10px;box-shadow:0 4px 14px rgba(27,42,74,.15);overflow:hidden;z-index:20;display:none;min-width:200px;
+    position:absolute;top:56px;right:14px;background:#fff;border:1px solid var(--line);
+    border-radius:14px;box-shadow:0 8px 24px rgba(30,25,142,.16);overflow:hidden;z-index:20;display:none;min-width:200px;
   }
   .menu-panel.open{display:block;}
-  .menu-item{padding:13px 16px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;border-bottom:1px solid var(--line);}
+  .menu-item{padding:13px 16px;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer;border-bottom:1px solid var(--line);}
   .menu-item:last-child{border-bottom:none;}
-  .menu-item:active{background:var(--paper);}
+  .menu-item:active{background:var(--lavender);}
+
+  /* Cover page */
+  .cover-hero{
+    background:linear-gradient(180deg, var(--navy) 0%, var(--violet) 55%, var(--lavender) 100%);
+    padding:64px 24px 36px;text-align:center;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  }
+  .cover-icon svg{width:92px;height:92px;}
+  .cover-title{
+    font-weight:900;font-size:30px;color:#fff;line-height:1.28;margin:0;max-width:340px;
+  }
+  .cover-bottom{padding:26px 24px 54px;text-align:center;}
+  .cover-subtitle{font-weight:700;color:var(--navy);font-size:18px;line-height:1.45;margin:0 0 26px;max-width:320px;margin-left:auto;margin-right:auto;}
+  .cta-btn{
+    background:var(--navy);color:#fff;border:none;padding:16px 44px;border-radius:30px;
+    font-weight:700;font-size:16px;cursor:pointer;font-family:inherit;
+  }
+  .cta-btn:active{opacity:.88;}
 
   header{margin-bottom:22px;}
-  .eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:4px;}
-  h1{font-family:Georgia,"Times New Roman",serif;font-size:24px;margin:0 0 4px;line-height:1.2;}
-  .subtitle{font-size:13px;color:var(--ink-soft);}
-  .today-badge{
-    display:inline-block;margin-top:10px;background:var(--ink);color:var(--paper);
-    font-size:12px;padding:5px 12px;border-radius:20px;font-weight:600;
+  .header-gradient{
+    background:linear-gradient(180deg, var(--navy) 0%, var(--violet) 100%);
+    margin:0 -14px 22px;padding:30px 14px 34px;text-align:center;position:relative;
   }
+  .header-gradient h1{font-weight:900;font-size:26px;color:#fff;margin:0 0 6px;}
+  .header-gradient .subtitle{font-size:14px;color:rgba(255,255,255,.9);font-weight:500;}
+  .header-gradient .subtitle b{font-weight:700;color:#fff;}
+  .plain-header h1{font-weight:900;font-size:22px;margin:0 0 4px;color:var(--navy);}
+  .plain-header .subtitle{font-size:13px;color:var(--ink-soft);font-weight:500;}
+
   section{margin-bottom:28px;}
-  h2{font-family:Georgia,serif;font-size:16px;margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line);}
+  h2{font-weight:700;font-size:17px;margin:0 0 4px;color:var(--navy);}
+  .section-subtitle{font-size:13px;color:var(--ink-soft);font-weight:500;margin:0 0 14px;}
+  .section-rule{border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px;}
 
   .page{display:none;}
   .page.active{display:block;}
 
   /* Form */
-  .form-card{background:var(--card-bg);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(27,42,74,.08);}
+  .form-card{background:var(--card-bg);border-radius:16px;padding:16px;border:1px solid var(--line);}
   .field-row{display:flex;gap:8px;margin-bottom:10px;}
-  .field{flex:1;display:flex;flex-direction:column;gap:4px;}
-  .field label{font-size:11px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em;}
+  .field{flex:1;display:flex;flex-direction:column;gap:5px;}
+  .field label{font-size:12px;font-weight:500;color:var(--ink-soft);}
   .field input{
-    padding:10px;border-radius:8px;border:1px solid var(--line);font-size:14px;color:var(--ink);background:var(--paper);
+    padding:12px;border-radius:10px;border:1px solid var(--line);font-size:14px;color:var(--ink);background:#fff;
+    font-family:inherit;
   }
-  .checkbox-row{
-    display:flex;align-items:center;gap:9px;padding:11px 4px;margin-bottom:10px;
-  }
-  .checkbox-row input{width:18px;height:18px;flex-shrink:0;}
-  .checkbox-row label{font-size:13.5px;font-weight:600;color:var(--ink);}
+  .field input::placeholder{color:#B7B4CC;}
+  .checkbox-row{display:flex;align-items:center;gap:9px;padding:11px 4px;margin-bottom:10px;}
+  .checkbox-row input{width:18px;height:18px;flex-shrink:0;accent-color:var(--navy);}
+  .checkbox-row label{font-size:13.5px;font-weight:500;color:var(--ink);}
   .checkbox-row .hint{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);margin-top:1px;}
   .add-btn{
-    width:100%;padding:11px;border-radius:8px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);
-    font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;
+    width:100%;padding:13px;border-radius:24px;border:none;background:var(--violet);color:#fff;
+    font-size:14.5px;font-weight:700;cursor:pointer;margin-top:4px;font-family:inherit;
   }
   .finalize-btn{
-    width:100%;padding:14px;border-radius:9px;border:none;background:var(--ink);color:var(--paper);
-    font-size:15px;font-weight:700;cursor:pointer;margin-top:18px;
+    width:100%;padding:15px;border-radius:28px;border:none;background:var(--navy);color:#fff;
+    font-size:15.5px;font-weight:700;cursor:pointer;margin-top:20px;font-family:inherit;
   }
-  .finalize-btn:active,.add-btn:active{opacity:.85;}
+  .finalize-btn:active,.add-btn:active{opacity:.88;}
 
   .pending-list{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
   .pending-item{
-    display:flex;justify-content:space-between;align-items:center;background:var(--card-bg);
-    border-radius:8px;padding:10px 12px;font-size:13px;box-shadow:0 1px 3px rgba(27,42,74,.06);
+    display:flex;justify-content:space-between;align-items:center;background:#fff;
+    border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:13px;
   }
   .pending-item b{font-weight:700;}
-  .pending-item span.meta{color:var(--ink-soft);font-size:11.5px;display:block;}
+  .pending-item span.meta{color:var(--ink-soft);font-size:11.5px;display:block;font-weight:400;}
   .etoro-badge{
-    display:inline-block;margin-top:3px;font-size:10px;font-weight:700;background:var(--gold-soft);
-    color:#7A5D0A;padding:1px 7px;border-radius:20px;
+    display:inline-block;margin-top:3px;font-size:10px;font-weight:700;background:var(--lavender);
+    color:var(--violet);padding:2px 8px;border-radius:20px;
   }
   .remove-x{background:none;border:none;color:var(--danger);font-size:18px;font-weight:700;cursor:pointer;line-height:1;}
 
   /* Card list (calendar page) */
   .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .card-tile{
-    background:var(--card-bg);border-radius:10px;padding:12px 12px 14px;
-    border-left:5px solid var(--gold);box-shadow:0 1px 3px rgba(27,42,74,.08);
+    background:#fff;border-radius:14px;padding:14px 14px 15px;
+    border:1px solid var(--line);border-left:4px solid var(--violet);
   }
-  .card-name{font-size:14px;font-weight:700;margin:0 0 10px;}
-  .row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--ink-soft);}
-  .row b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;}
-  .empty-msg{font-size:13px;color:var(--ink-soft);padding:14px;text-align:center;background:var(--card-bg);border-radius:10px;}
+  .card-name{font-size:14px;font-weight:700;margin:0 0 10px;color:var(--ink);}
+  .row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--ink-soft);font-weight:400;}
+  .row b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums;}
+  .empty-msg{font-size:13px;color:var(--ink-soft);padding:16px;text-align:center;background:var(--lavender);border-radius:12px;}
 
-  /* Tabs */
-  .tabs{display:flex;gap:8px;margin-bottom:16px;}
+  /* Calendar panel */
+  .calendar-panel{background:var(--lavender);border-radius:20px;padding:18px 16px;margin-bottom:16px;}
+  .tabs{display:flex;gap:8px;margin-bottom:14px;}
   .tab-btn{
-    flex:1;padding:10px 8px;border-radius:9px;border:1px solid var(--line);
-    background:var(--card-bg);font-size:13px;font-weight:700;color:var(--ink-soft);
-    cursor:pointer;text-align:center;transition:.15s;
+    flex:1;padding:11px 8px;border-radius:14px;border:1px solid var(--line);
+    background:#fff;font-size:13px;font-weight:700;color:var(--ink-soft);
+    cursor:pointer;text-align:center;transition:.15s;font-family:inherit;
   }
-  .tab-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .tab-btn span{font-weight:400;font-size:11px;}
+  .tab-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .tab-btn.active span{color:rgba(255,255,255,.85);}
 
   .month-selector{display:flex;gap:8px;align-items:center;margin-bottom:14px;}
   .month-selector select{
-    flex:1;padding:9px 10px;border-radius:8px;border:1px solid var(--line);
-    background:var(--card-bg);font-size:14px;color:var(--ink);font-weight:600;-webkit-appearance:none;appearance:none;
+    flex:1;padding:10px 12px;border-radius:12px;border:1px solid var(--line);
+    background:#fff;font-size:14px;color:var(--ink);font-weight:500;-webkit-appearance:none;appearance:none;
+    font-family:inherit;
   }
 
-  .cal-card{background:var(--card-bg);border-radius:12px;padding:14px;box-shadow:0 1px 3px rgba(27,42,74,.08);margin-bottom:14px;}
+  .cal-card{background:#fff;border-radius:16px;padding:14px;border:1px solid var(--line);}
   .weekday-row{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px;}
   .weekday-row span{text-align:center;font-size:10.5px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;}
   .day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
   .day-cell{
-    aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;
-    border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer;border:1.5px solid transparent;transition:.12s;
+    aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;
+    border-radius:10px;background:var(--lavender);color:var(--ink);cursor:pointer;border:1.5px solid transparent;transition:.12s;
   }
-  .day-cell:hover{border-color:var(--gold);}
+  .day-cell:hover{border-color:var(--violet);}
   .day-cell.empty{visibility:hidden;cursor:default;}
-  .day-cell.today{border-color:var(--ink);}
-  .day-cell.selected{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+  .day-cell.today{border-color:var(--navy);}
+  .day-cell.selected{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:700;}
 
-  .detail{background:var(--card-bg);border-radius:10px;padding:14px 14px 16px;box-shadow:0 1px 3px rgba(27,42,74,.08);}
-  .detail-date{font-size:12px;color:var(--ink-soft);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
-  .detail-pick{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:6px 0 10px;}
-  .pick-name{font-family:Georgia,serif;font-size:19px;font-weight:700;}
-  .pick-margin{background:var(--gold-soft);color:#7A5D0A;font-size:12px;font-weight:700;padding:2px 9px;border-radius:20px;}
-  .detail-all{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
-  .mini-row{display:flex;justify-content:space-between;font-size:12.5px;padding:7px 10px;border-radius:6px;background:#FAF8F2;}
-  .mini-row.winner{background:var(--gold-soft);font-weight:700;}
-  .mini-row span:first-child{color:var(--ink-soft);}
-  .mini-row.winner span:first-child{color:var(--ink);}
-  .mini-row b{font-variant-numeric:tabular-nums;}
+  .detail{background:#fff;border-radius:16px;padding:16px 16px 18px;border:1px solid var(--line);}
+  .detail-date{font-size:11.5px;color:var(--ink-soft);font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+  .detail-pick{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:6px 0 12px;}
+  .pick-name{font-weight:900;font-size:19px;color:var(--navy);}
+  .pick-margin{background:var(--navy);color:#fff;font-size:12px;font-weight:700;padding:3px 11px;border-radius:20px;}
+  .detail-all{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+  .mini-row{display:flex;justify-content:space-between;font-size:12.5px;padding:9px 12px;border-radius:10px;background:var(--lavender);}
+  .mini-row.winner{background:#E6E2F9;font-weight:700;}
+  .mini-row span:first-child{color:var(--ink-soft);font-weight:500;}
+  .mini-row.winner span:first-child{color:var(--navy);font-weight:700;}
+  .mini-row b{font-variant-numeric:tabular-nums;color:var(--ink);}
   .mini-sub{font-size:10.5px;font-weight:400;color:var(--ink-soft);display:block;margin-top:1px;}
 
-  .note{font-size:12.5px;color:var(--ink-soft);line-height:1.55;background:#FAF8F2;border-radius:10px;padding:14px;border:1px solid var(--line);}
-  .note b{color:var(--ink);}
+  .note{font-size:12.5px;color:var(--navy);line-height:1.55;background:var(--lavender);border-radius:14px;padding:15px;}
+  .note b{font-weight:700;}
 
-  .reminder-card{background:var(--card-bg);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(27,42,74,.08);}
+  .reminder-card{background:#fff;border-radius:16px;padding:18px;border:1px solid var(--line);}
   .reminder-btn{
-    width:100%;padding:13px;border-radius:9px;border:none;background:var(--blue);color:#FFFFFF;
-    font-size:14.5px;font-weight:700;cursor:pointer;
+    width:100%;padding:14px;border-radius:24px;border:none;background:var(--blue);color:#fff;
+    font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;
   }
-  .reminder-btn:active{opacity:.85;}
-  .reminder-note{font-size:11.5px;color:var(--ink-soft);margin-top:10px;line-height:1.5;}
+  .reminder-btn:active{opacity:.88;}
+  .reminder-note{font-size:11.5px;color:var(--ink-soft);margin-top:12px;line-height:1.55;}
   .install-btn{
-    width:100%;padding:12px;border-radius:9px;border:1px solid var(--ink);background:var(--card-bg);color:var(--ink);
-    font-size:13.5px;font-weight:700;cursor:pointer;margin-top:10px;
+    width:100%;padding:13px;border-radius:24px;border:1.5px solid var(--navy);background:#fff;color:var(--navy);
+    font-size:13.5px;font-weight:700;cursor:pointer;margin-top:12px;font-family:inherit;
   }
   .install-btn:active{opacity:.8;}
 
-  /* Modal de instalación - efecto vidrio */
+  /* Modal de instalación - vidrio */
   .install-overlay{
-    position:fixed;inset:0;background:rgba(27,42,74,.35);
+    position:fixed;inset:0;background:rgba(30,25,142,.35);
     backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
     display:none;align-items:center;justify-content:center;z-index:100;padding:22px;
   }
   .install-overlay.open{display:flex;}
   .install-modal{
-    background:rgba(255,255,255,.78);
+    background:rgba(255,255,255,.82);
     backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
-    border-radius:20px;border:1px solid rgba(255,255,255,.6);
+    border-radius:22px;border:1px solid rgba(255,255,255,.6);
     padding:22px 20px 20px;max-width:360px;width:100%;
-    box-shadow:0 20px 50px rgba(27,42,74,.28);position:relative;
+    box-shadow:0 20px 50px rgba(30,25,142,.28);position:relative;
   }
-  .install-modal h3{
-    font-family:Georgia,serif;font-size:18px;margin:0 0 18px;padding-right:26px;color:var(--ink);line-height:1.3;
-  }
+  .install-modal h3{font-weight:900;font-size:18px;margin:0 0 18px;padding-right:26px;color:var(--navy);line-height:1.3;}
   .modal-close{
-    position:absolute;top:14px;right:14px;background:rgba(27,42,74,.08);border:none;
-    width:30px;height:30px;border-radius:50%;font-size:16px;color:var(--ink);cursor:pointer;line-height:1;
+    position:absolute;top:14px;right:14px;background:rgba(30,25,142,.08);border:none;
+    width:30px;height:30px;border-radius:50%;font-size:16px;color:var(--navy);cursor:pointer;line-height:1;
   }
   .install-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;}
   .install-step:last-child{margin-bottom:0;}
   .install-step-icon{
-    width:38px;height:38px;border-radius:11px;background:rgba(181,134,11,.16);
-    display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+    width:38px;height:38px;border-radius:11px;background:rgba(79,60,219,.14);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
   }
-  .install-step-icon svg{width:20px;height:20px;color:var(--gold);}
-  .install-step-text{font-size:13.5px;color:var(--ink);line-height:1.45;padding-top:4px;}
-  .install-step-label{
-    display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;
-    color:var(--ink-soft);margin-bottom:2px;font-weight:700;
-  }
+  .install-step-icon svg{width:20px;height:20px;color:var(--violet);}
+  .install-step-text{font-size:13.5px;color:var(--ink);line-height:1.45;padding-top:4px;font-weight:400;}
+  .install-step-text b{font-weight:700;}
+  .install-step-label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin-bottom:2px;font-weight:700;}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="brand">Erika · Tarjetas de crédito</div>
+<div class="topbar" id="topbar" style="display:none;">
+  <div class="brand">Erika · Tarjetas</div>
   <div style="position:relative;">
-    <button class="menu-btn" onclick="toggleMenu()">&#9776;</button>
+    <button class="menu-btn" onclick="toggleMenu()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
     <div class="menu-panel" id="menuPanel">
       <div class="menu-item" onclick="goTo('form')">Agregar tarjetas</div>
       <div class="menu-item" onclick="goTo('calendar')">Ver calendario</div>
@@ -215,32 +245,65 @@
   </div>
 </div>
 
+<!-- ================= PORTADA ================= -->
+<div class="page active" id="page-cover">
+  <div class="cover-hero">
+    <div class="cover-icon">
+      <svg viewBox="0 0 100 100" fill="none">
+        <rect x="10" y="28" width="80" height="52" rx="10" fill="#ffffff" opacity="0.95"/>
+        <rect x="10" y="40" width="80" height="12" fill="#4F3CDB"/>
+        <rect x="18" y="60" width="26" height="8" rx="3" fill="#E4E2F0"/>
+        <rect x="50" y="60" width="16" height="8" rx="3" fill="#E4E2F0"/>
+      </svg>
+    </div>
+    <h1 class="cover-title">Tus fechas de corte<br>y pago bajo control</h1>
+  </div>
+  <div class="cover-bottom">
+    <p class="cover-subtitle">Organiza tus tarjetas y<br>aprovéchalas al máximo</p>
+    <button class="cta-btn" onclick="goTo('form')">Comenzar</button>
+  </div>
+</div>
+
 <div class="wrap">
 
-  <!-- ================= PÁGINA 1: FORMULARIO ================= -->
+  <!-- ================= FORMULARIO ================= -->
   <div class="page" id="page-form">
-    <header>
-      <h1>Tus tarjetas</h1>
-      <div class="subtitle">Agrega, edita o quita tarjetas cuando quieras</div>
-    </header>
+    <div class="header-gradient">
+      <h1>Cuéntanos de tus tarjetas</h1>
+      <div class="subtitle">Completa tus datos para armar tu calendario personal</div>
+    </div>
 
     <section>
-      <h2>Agregar tarjeta</h2>
+      <h2>Tu Datos</h2>
+      <div class="section-rule"></div>
       <div class="form-card">
         <div class="field-row">
           <div class="field">
-            <label>Nombre de la tarjeta</label>
+            <label>¿Cómo te llamas?</label>
+            <input type="text" id="inpUserName" placeholder="Ej: Erika">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Agrega tus Tarjetas</h2>
+      <div class="section-rule"></div>
+      <div class="form-card">
+        <div class="field-row">
+          <div class="field">
+            <label>Nombre de la Tarjeta</label>
             <input type="text" id="inpName" placeholder="Ej: BBVA Visa Signature">
           </div>
         </div>
         <div class="field-row">
           <div class="field">
-            <label>Día de cierre (1-31)</label>
+            <label>Día de cierre</label>
             <input type="number" id="inpClose" min="1" max="31" placeholder="Ej: 10">
           </div>
           <div class="field">
-            <label>Días hasta el pago</label>
-            <input type="number" id="inpOffset" min="1" max="45" placeholder="Ej: 28">
+            <label>Día de Pago</label>
+            <input type="number" id="inpPay" min="1" max="31" placeholder="Ej: 21">
           </div>
         </div>
         <div class="checkbox-row">
@@ -249,41 +312,44 @@
             <span class="hint">Solo márcala si eToro la acepta (en tu caso: BBVA y Scotiabank)</span>
           </label>
         </div>
-        <button class="add-btn" onclick="addCard()">+ Agregar tarjeta</button>
+        <button class="add-btn" onclick="addCard()">+ Agrega Tarjeta</button>
       </div>
 
       <div class="pending-list" id="pendingList"></div>
     </section>
 
-    <button class="finalize-btn" onclick="finalizeForm()">Finalizar y ver mi calendario</button>
+    <button class="finalize-btn" onclick="finalizeForm()">Ver mi Calendario</button>
   </div>
 
-  <!-- ================= PÁGINA 2: CALENDARIO ================= -->
+  <!-- ================= CALENDARIO ================= -->
   <div class="page" id="page-calendar">
-    <header>
-      <h1>Calendario de cierres y pagos</h1>
-      <div class="subtitle" id="cardNamesLine">—</div>
-      <div class="today-badge" id="todayBadge">Hoy: —</div>
-    </header>
+    <div class="header-gradient">
+      <h1 id="greeting">¡Hola!</h1>
+      <div class="subtitle" id="todayLine">Hoy: —</div>
+    </div>
 
     <section>
       <h2>Mis Tarjetas</h2>
+      <div class="section-rule"></div>
       <div class="cards-grid" id="cardsGrid"></div>
     </section>
 
     <section>
-      <h2>Calendario interactivo — elige un día</h2>
-      <div class="tabs">
-        <button class="tab-btn active" id="tabEtoro" onclick="setTab('etoro')">Para eToro<br><span style="font-weight:400;font-size:11px;" id="etoroTabSub">—</span></button>
-        <button class="tab-btn" id="tabCompras" onclick="setTab('compras')">Para mis compras<br><span style="font-weight:400;font-size:11px;">Todas mis tarjetas</span></button>
-      </div>
-      <div class="month-selector">
-        <select id="monthSelect" onchange="renderCalendar()"></select>
-        <select id="yearSelect" onchange="renderCalendar()"></select>
-      </div>
-      <div class="cal-card">
-        <div class="weekday-row"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
-        <div class="day-grid" id="dayGrid"></div>
+      <div class="calendar-panel">
+        <h2>Calendario</h2>
+        <div class="section-subtitle">Elige un día</div>
+        <div class="tabs">
+          <button class="tab-btn active" id="tabEtoro" onclick="setTab('etoro')">Para eToro<br><span id="etoroTabSub">—</span></button>
+          <button class="tab-btn" id="tabCompras" onclick="setTab('compras')">Para mis compras<br><span>Todas mis tarjetas</span></button>
+        </div>
+        <div class="month-selector">
+          <select id="monthSelect" onchange="renderCalendar()"></select>
+          <select id="yearSelect" onchange="renderCalendar()"></select>
+        </div>
+        <div class="cal-card">
+          <div class="weekday-row"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+          <div class="day-grid" id="dayGrid"></div>
+        </div>
       </div>
       <div class="detail" id="detailPanel"></div>
     </section>
@@ -301,10 +367,11 @@
 
     <section>
       <h2>Recordatorios automáticos</h2>
+      <div class="section-rule"></div>
       <div class="reminder-card">
         <button class="reminder-btn" onclick="downloadICS()">Recuérdalo en tu calendario</button>
         <div class="reminder-note">
-          Descarga un archivo con la fecha de pago de todas tus tarjetas para los próximos 12 meses, con dos avisos automáticos: 3 días antes y 1 día antes, a las 12:00 pm. Optimizado para <b>iPhone (Apple Calendario)</b>. Si cambias algo, primero elimina el calendario importado en Ajustes → Calendario → Cuentas, y vuelve a darle a este botón.
+          Descarga un archivo con la fecha de pago de todas tus tarjetas para los próximos 12 meses, con dos avisos automáticos: 3 días antes y 1 día antes, a las 12:00 pm. En iPhone: toca "Guardar" en el banner de abajo, y luego abre el archivo desde ahí (o desde Archivos) para que Calendario te muestre la opción de agregar todos los eventos. Si cambias algo, primero elimina el calendario importado en Ajustes → Calendario → Cuentas, y vuelve a darle a este botón.
         </div>
         <button class="install-btn" onclick="tryInstall()">Agregar a inicio / favoritos</button>
       </div>
@@ -329,7 +396,8 @@ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 let viewYear = today.getFullYear(), viewMonth = today.getMonth();
 let selectedDate = new Date(today);
 let activeTab = 'etoro';
-let cards = {}; // { id: {name, closeDay, dueOffset, etoro:bool} }
+let cards = {};      // { id: {name, closeDay, payDay, etoro:bool} }
+let userName = '';
 
 /* ---------- Colores por banco ---------- */
 const bankColorMap = [
@@ -365,45 +433,81 @@ function getCardColor(name){
 function fmtDate(d){
   return d.getDate() + ' ' + monthNames[d.getMonth()].slice(0,3).toLowerCase() + ' ' + d.getFullYear();
 }
-function getCycleInfo(date, closeDay, dueOffset){
+
+/* Ciclo basado en Día de Cierre + Día de Pago (día del mes, no un conteo de días) */
+function getCycleInfo(date, closeDay, payDay){
   const y = date.getFullYear(), m = date.getMonth(), day = date.getDate();
   let cycleClose = (day <= closeDay) ? new Date(y, m, closeDay) : new Date(y, m+1, closeDay);
-  let dueDate = new Date(cycleClose);
-  dueDate.setDate(dueDate.getDate() + dueOffset);
-  let marginDays = Math.round((dueDate - date) / 86400000);
+  let dueDate = new Date(cycleClose.getFullYear(), cycleClose.getMonth(), payDay);
+  if(dueDate <= cycleClose){
+    dueDate = new Date(cycleClose.getFullYear(), cycleClose.getMonth()+1, payDay);
+  }
+  const marginDays = Math.round((dueDate - date) / 86400000);
   return {cycleClose, dueDate, marginDays};
 }
 
-/* ---------- Persistencia local + datos por defecto ---------- */
+/* ---------- Persistencia local + migración + datos por defecto ---------- */
 function seedDefaults(){
   cards = {
-    c1:{name:'BBVA Visa Signature', closeDay:10, dueOffset:28, etoro:true},
-    c2:{name:'Interbank Platinum',  closeDay:26, dueOffset:26, etoro:false},
-    c3:{name:'Diners Club DC Miles',closeDay:9,  dueOffset:23, etoro:false},
-    c4:{name:'Scotiabank Visa Infinite', closeDay:24, dueOffset:28, etoro:true}
+    c1:{name:'BBVA Visa Signature', closeDay:10, payDay:7,  etoro:true},
+    c2:{name:'Interbank Platinum',  closeDay:26, payDay:21, etoro:false},
+    c3:{name:'Diners Club DC Miles',closeDay:9,  payDay:1,  etoro:false},
+    c4:{name:'Scotiabank Visa Infinite', closeDay:24, payDay:21, etoro:true}
   };
+  userName = 'Erika';
   saveState();
 }
-function saveState(){ localStorage.setItem('tarjetas_erika', JSON.stringify(cards)); }
+function migrateCard(c){
+  // Convierte tarjetas guardadas con el modelo viejo (dueOffset) al nuevo (payDay)
+  if(c.payDay === undefined && c.dueOffset !== undefined){
+    const y = today.getFullYear(), m = today.getMonth(), day = today.getDate();
+    let cycleClose = (day <= c.closeDay) ? new Date(y, m, c.closeDay) : new Date(y, m+1, c.closeDay);
+    let due = new Date(cycleClose);
+    due.setDate(due.getDate() + c.dueOffset);
+    c.payDay = due.getDate();
+    delete c.dueOffset;
+  }
+  return c;
+}
+function saveState(){
+  localStorage.setItem('tarjetas_erika_v4', JSON.stringify(cards));
+  localStorage.setItem('tarjetas_erika_v4_name', userName);
+}
 function loadState(){
-  const raw = localStorage.getItem('tarjetas_erika');
-  if(raw){ try{ cards = JSON.parse(raw); }catch(e){ seedDefaults(); } }
-  else{ seedDefaults(); }
+  const raw = localStorage.getItem('tarjetas_erika_v4') || localStorage.getItem('tarjetas_erika');
+  const rawName = localStorage.getItem('tarjetas_erika_v4_name');
+  if(raw){
+    try{
+      cards = JSON.parse(raw);
+      Object.values(cards).forEach(migrateCard);
+    }catch(e){ cards = {}; }
+  }
+  userName = rawName || (Object.keys(cards).length ? 'Erika' : '');
+  if(Object.keys(cards).length === 0){
+    // primera vez de verdad: sin datos, se queda vacío para mostrar la portada
+    userName = '';
+  }
 }
 
 /* ---------- Menú y navegación ---------- */
 function toggleMenu(){ document.getElementById('menuPanel').classList.toggle('open'); }
 function goTo(page){
   document.getElementById('menuPanel').classList.remove('open');
+  document.getElementById('topbar').style.display = (page==='cover') ? 'none' : 'flex';
+  document.getElementById('page-cover').classList.toggle('active', page==='cover');
   document.getElementById('page-form').classList.toggle('active', page==='form');
   document.getElementById('page-calendar').classList.toggle('active', page==='calendar');
-  if(page==='form') renderPendingList();
+  if(page==='form'){
+    document.getElementById('inpUserName').value = userName || '';
+    renderPendingList();
+  }
   if(page==='calendar') renderCalendarPage();
+  window.scrollTo(0,0);
 }
 document.addEventListener('click', (e)=>{
   const panel = document.getElementById('menuPanel');
   const btn = document.querySelector('.menu-btn');
-  if(panel.classList.contains('open') && !panel.contains(e.target) && e.target!==btn){
+  if(panel && panel.classList.contains('open') && !panel.contains(e.target) && e.target!==btn){
     panel.classList.remove('open');
   }
 });
@@ -412,18 +516,18 @@ document.addEventListener('click', (e)=>{
 function addCard(){
   const name = document.getElementById('inpName').value.trim();
   const closeDay = parseInt(document.getElementById('inpClose').value);
-  const dueOffset = parseInt(document.getElementById('inpOffset').value);
+  const payDay = parseInt(document.getElementById('inpPay').value);
   const etoro = document.getElementById('inpEtoro').checked;
-  if(!name || !closeDay || closeDay<1 || closeDay>31 || !dueOffset || dueOffset<1){
-    alert('Completa el nombre, un día de cierre (1-31) y los días hasta el pago.');
+  if(!name || !closeDay || closeDay<1 || closeDay>31 || !payDay || payDay<1 || payDay>31){
+    alert('Completa el nombre, el día de cierre (1-31) y el día de pago (1-31).');
     return;
   }
   const id = 't_' + Date.now();
-  cards[id] = {name, closeDay, dueOffset, etoro};
+  cards[id] = {name, closeDay, payDay, etoro};
   saveState();
   document.getElementById('inpName').value='';
   document.getElementById('inpClose').value='';
-  document.getElementById('inpOffset').value='';
+  document.getElementById('inpPay').value='';
   document.getElementById('inpEtoro').checked=false;
   renderPendingList();
 }
@@ -439,7 +543,7 @@ function renderPendingList(){
   list.innerHTML = ids.map(id=>{
     const c = cards[id];
     return `<div class="pending-item">
-      <div><b>${c.name}</b><span class="meta">Cierra día ${c.closeDay} · Pago a los ${c.dueOffset} días</span>
+      <div><b>${c.name}</b><span class="meta">Cierra día ${c.closeDay} · Paga día ${c.payDay}</span>
         ${c.etoro ? '<span class="etoro-badge">eToro</span>' : ''}
       </div>
       <button class="remove-x" onclick="removeCard('${id}')">×</button>
@@ -447,16 +551,19 @@ function renderPendingList(){
   }).join('');
 }
 function finalizeForm(){
+  const name = document.getElementById('inpUserName').value.trim();
+  if(!name){ alert('Escribe tu nombre.'); return; }
   if(Object.keys(cards).length===0){ alert('Agrega al menos una tarjeta.'); return; }
+  userName = name;
   saveState();
   goTo('calendar');
 }
 
 /* ---------- Página calendario ---------- */
 function renderCalendarPage(){
-  document.getElementById('cardNamesLine').textContent = Object.values(cards).map(c=>c.name).join(' · ');
-  document.getElementById('todayBadge').textContent =
-    'Hoy: ' + today.getDate() + ' de ' + monthNames[today.getMonth()].toLowerCase() + ', ' + today.getFullYear();
+  document.getElementById('greeting').textContent = '¡Hola ' + (userName || 'Erika') + '!';
+  document.getElementById('todayLine').innerHTML =
+    'Hoy: <b>' + today.getDate() + ' de ' + monthNames[today.getMonth()].toLowerCase() + '</b>, ' + today.getFullYear();
   const etoroNames = Object.values(cards).filter(c=>c.etoro).map(c=>c.name.split(' ')[0]);
   document.getElementById('etoroTabSub').textContent = etoroNames.length ? etoroNames.join(' + ') : 'Ninguna marcada';
   renderCardsGrid();
@@ -474,12 +581,11 @@ function renderCardsGrid(){
   }
   grid.innerHTML = ids.map(id=>{
     const c = cards[id];
-    const info = getCycleInfo(today, c.closeDay, c.dueOffset);
+    const info = getCycleInfo(today, c.closeDay, c.payDay);
     return `<div class="card-tile" style="border-left-color:${getCardColor(c.name)}">
       <div class="card-name">${c.name}${c.etoro ? ' <span class="etoro-badge">eToro</span>' : ''}</div>
-      <div class="row"><span>Cierra</span><b>día ${c.closeDay}</b></div>
-      <div class="row"><span>Próx. cierre</span><b>${fmtDate(info.cycleClose)}</b></div>
-      <div class="row"><span>Pago</span><b>${fmtDate(info.dueDate)}</b></div>
+      <div class="row"><span>Cierre:</span><b>Día ${c.closeDay}</b></div>
+      <div class="row"><span>Próx. Pago:</span><b>${fmtDate(info.dueDate)}</b></div>
     </div>`;
   }).join('');
 }
@@ -556,7 +662,7 @@ function renderDetail(){
   }
   const results = ids.map(id=>{
     const c = cards[id];
-    const info = getCycleInfo(selectedDate, c.closeDay, c.dueOffset);
+    const info = getCycleInfo(selectedDate, c.closeDay, c.payDay);
     return {name:c.name, margin:info.marginDays, due:info.dueDate};
   }).sort((a,b)=>b.margin-a.margin);
 
@@ -591,16 +697,12 @@ function icsStamp(){
 }
 function slug(s){ return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-'); }
 
-function getUpcomingDueDates(closeDay, dueOffset, count){
-  const dates = [];
-  const day = today.getDate();
-  let cycleClose = (day <= closeDay) ? new Date(today.getFullYear(), today.getMonth(), closeDay)
-                                      : new Date(today.getFullYear(), today.getMonth()+1, closeDay);
-  for(let i=0;i<count;i++){
-    const due = new Date(cycleClose);
-    due.setDate(due.getDate() + dueOffset);
-    dates.push(due);
-    cycleClose = new Date(cycleClose.getFullYear(), cycleClose.getMonth()+1, closeDay);
+function getUpcomingDueDates(closeDay, payDay, count){
+  const first = getCycleInfo(today, closeDay, payDay).dueDate;
+  const dates = [first];
+  for(let i=1;i<count;i++){
+    const prev = dates[dates.length-1];
+    dates.push(new Date(prev.getFullYear(), prev.getMonth()+1, payDay));
   }
   return dates;
 }
@@ -612,7 +714,7 @@ function downloadICS(){
 
   ids.forEach(id=>{
     const c = cards[id];
-    const dueDates = getUpcomingDueDates(c.closeDay, c.dueOffset, 12);
+    const dueDates = getUpcomingDueDates(c.closeDay, c.payDay, 12);
     dueDates.forEach(due=>{
       const uid = `${slug(c.name)}-${due.getFullYear()}${pad(due.getMonth()+1)}${pad(due.getDate())}@erika-tarjetas`;
       const dtStart = icsDateTime(due, 12, 0);
@@ -634,18 +736,12 @@ function downloadICS(){
   ics += 'END:VCALENDAR\r\n';
   const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
   const url = URL.createObjectURL(blob);
-  const ua = navigator.userAgent;
-  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-  if(isIOS){
-    window.location.href = url;
-  } else {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'recordatorios-tarjetas-erika.ics';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'calendariopagos.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(url), 4000);
 }
 
@@ -676,14 +772,14 @@ function showInstallModal(isIOS){
     steps.innerHTML = `
       <div class="install-step"><div class="install-step-icon">${iconShare}</div><div class="install-step-text"><span class="install-step-label">Paso 1</span>Toca el botón <b>Compartir</b> en la barra de tu navegador.</div></div>
       <div class="install-step"><div class="install-step-icon">${iconMore}</div><div class="install-step-text"><span class="install-step-label">Paso 2</span>Si no ves la opción, toca <b>"Ver más"</b> para desplegar todas las opciones.</div></div>
-      <div class="install-step"><div class="install-step-icon">${iconAdd}</div><div class="install-step-text"><span class="install-step-label">Paso 3</span>Toca <b>"Añadir a pantalla de inicio"</b> y confirma con "Agregar" arriba a la derecha.</div></div>
+      <div class="install-step"><div class="install-step-icon">${iconAdd}</div><div class="install-step-text"><span class="install-step-label">Paso 3</span>Toca <b>"Añadir a pantalla de inicio"</b> y confirma con "Agregar".</div></div>
     `;
   } else {
     title.textContent = 'Instala esta app en tu dispositivo';
     steps.innerHTML = `
-      <div class="install-step"><div class="install-step-icon">🖥️</div><div class="install-step-text"><span class="install-step-label">Paso 1</span>Busca el ícono de instalar (⊕) en la barra de direcciones, a la derecha.</div></div>
-      <div class="install-step"><div class="install-step-icon">☰</div><div class="install-step-text"><span class="install-step-label">Paso 2</span>Si no aparece, abre el menú (⋮ o ···) del navegador.</div></div>
-      <div class="install-step"><div class="install-step-icon">✅</div><div class="install-step-text"><span class="install-step-label">Paso 3</span>Elige <b>"Instalar app"</b> o <b>"Agregar a favoritos"</b>.</div></div>
+      <div class="install-step"><div class="install-step-icon">${iconShare}</div><div class="install-step-text"><span class="install-step-label">Paso 1</span>Busca el ícono de instalar (⊕) en la barra de direcciones, a la derecha.</div></div>
+      <div class="install-step"><div class="install-step-icon">${iconMore}</div><div class="install-step-text"><span class="install-step-label">Paso 2</span>Si no aparece, abre el menú (⋮ o ···) del navegador.</div></div>
+      <div class="install-step"><div class="install-step-icon">${iconAdd}</div><div class="install-step-text"><span class="install-step-label">Paso 3</span>Elige <b>"Instalar app"</b> o <b>"Agregar a favoritos"</b>.</div></div>
     `;
   }
   document.getElementById('installOverlay').classList.add('open');
@@ -694,7 +790,11 @@ function closeInstallModal(){
 
 /* ---------- Init ---------- */
 loadState();
-goTo('calendar');
+if(Object.keys(cards).length > 0){
+  goTo('calendar');
+} else {
+  goTo('cover');
+}
 </script>
 </body>
 </html>
