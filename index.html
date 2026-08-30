@@ -81,14 +81,15 @@
 
   header{margin-bottom:22px;}
   .header-gradient{
-    background:linear-gradient(180deg, var(--navy) 0%, var(--violet) 100%);
-    margin:0 -14px 0;padding:30px 14px 46px;text-align:center;position:relative;
+    background-image:url('fondo-portada.jpg');
+    background-size:cover;background-position:top center;background-repeat:no-repeat;
+    margin:0 -14px 0;padding:64px 14px 34px;text-align:center;position:relative;
   }
   .header-gradient h1{font-weight:900;font-size:26px;color:#fff;margin:0 0 6px;}
   .header-gradient .subtitle{font-size:14px;color:rgba(255,255,255,.9);font-weight:500;}
   .header-gradient .subtitle b{font-weight:700;color:#fff;}
   .form-sheet{
-    background:#fff;border-radius:36px 36px 0 0;margin:-28px -14px 0;padding:38px 14px 4px;position:relative;z-index:1;
+    background:#fff;border-radius:36px 36px 0 0;margin:-24px -14px 0;padding:30px 14px 4px;position:relative;z-index:1;
   }
   .plain-header h1{font-weight:900;font-size:22px;margin:0 0 4px;color:var(--navy);}
   .plain-header .subtitle{font-size:13px;color:var(--ink-soft);font-weight:500;}
@@ -500,7 +501,7 @@ function loadState(){
 function toggleMenu(){ document.getElementById('menuPanel').classList.toggle('open'); }
 function goTo(page){
   document.getElementById('menuPanel').classList.remove('open');
-  document.getElementById('topbar').style.display = (page==='cover') ? 'none' : 'flex';
+  document.getElementById('topbar').style.display = (page==='calendar') ? 'flex' : 'none';
   document.getElementById('page-cover').classList.toggle('active', page==='cover');
   document.getElementById('page-form').classList.toggle('active', page==='form');
   document.getElementById('page-calendar').classList.toggle('active', page==='calendar');
