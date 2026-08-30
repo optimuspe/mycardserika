@@ -34,10 +34,9 @@
 
   /* Top bar */
   .topbar{
-    display:flex;justify-content:space-between;align-items:center;
+    display:flex;justify-content:flex-end;align-items:center;
     max-width:640px;margin:0 auto;padding:16px 14px;position:relative;box-sizing:border-box;
   }
-  .topbar .brand{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--violet);font-weight:700;}
   .menu-btn{
     background:#fff;border:1px solid var(--line);border-radius:50%;
     width:40px;height:40px;display:flex;align-items:center;justify-content:center;
@@ -54,7 +53,7 @@
   .menu-item:active{background:var(--lavender);}
 
   /* Cover page */
-  #page-cover{
+  #page-cover.active{
     background-image:url('fondo-portada.jpg');
     background-size:cover;background-position:top center;background-repeat:no-repeat;
     position:relative;min-height:100dvh;display:flex;flex-direction:column;
@@ -83,11 +82,14 @@
   header{margin-bottom:22px;}
   .header-gradient{
     background:linear-gradient(180deg, var(--navy) 0%, var(--violet) 100%);
-    margin:0 -14px 22px;padding:30px 14px 34px;text-align:center;position:relative;
+    margin:0 -14px 0;padding:30px 14px 46px;text-align:center;position:relative;
   }
   .header-gradient h1{font-weight:900;font-size:26px;color:#fff;margin:0 0 6px;}
   .header-gradient .subtitle{font-size:14px;color:rgba(255,255,255,.9);font-weight:500;}
   .header-gradient .subtitle b{font-weight:700;color:#fff;}
+  .form-sheet{
+    background:#fff;border-radius:36px 36px 0 0;margin:-28px -14px 0;padding:38px 14px 4px;position:relative;z-index:1;
+  }
   .plain-header h1{font-weight:900;font-size:22px;margin:0 0 4px;color:var(--navy);}
   .plain-header .subtitle{font-size:13px;color:var(--ink-soft);font-weight:500;}
 
@@ -242,7 +244,6 @@
 <body>
 
 <div class="topbar" id="topbar" style="display:none;">
-  <div class="brand">Erika · Tarjetas</div>
   <div style="position:relative;">
     <button class="menu-btn" onclick="toggleMenu()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -277,6 +278,7 @@
       <div class="subtitle">Completa tus datos para armar tu calendario personal</div>
     </div>
 
+    <div class="form-sheet">
     <section>
       <h2>Tu Datos</h2>
       <div class="section-rule"></div>
@@ -323,6 +325,7 @@
     </section>
 
     <button class="finalize-btn" onclick="finalizeForm()">Ver mi Calendario</button>
+    </div>
   </div>
 
   <!-- ================= CALENDARIO ================= -->
