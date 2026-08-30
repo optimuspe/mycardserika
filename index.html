@@ -54,16 +54,24 @@
   .menu-item:active{background:var(--lavender);}
 
   /* Cover page */
-  .cover-hero{
-    background:linear-gradient(180deg, var(--navy) 0%, var(--violet) 55%, var(--lavender) 100%);
-    padding:64px 24px 36px;text-align:center;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  #page-cover{
+    background-image:url('fondo-portada.jpg');
+    background-size:cover;background-position:top center;background-repeat:no-repeat;
+    min-height:100vh;position:relative;
   }
-  .cover-icon svg{width:92px;height:92px;}
+  .cover-hero{
+    padding:70px 24px 60px;text-align:center;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
+    position:relative;z-index:1;
+  }
+  .cover-icon img{width:100%;max-width:300px;display:block;margin:0 auto;}
   .cover-title{
     font-weight:900;font-size:30px;color:#fff;line-height:1.28;margin:0;max-width:340px;
   }
-  .cover-bottom{padding:26px 24px 54px;text-align:center;}
+  .cover-bottom{
+    background:#fff;border-radius:48px 48px 0 0;margin-top:-46px;position:relative;z-index:2;
+    padding:46px 24px 54px;text-align:center;
+  }
   .cover-subtitle{font-weight:700;color:var(--navy);font-size:18px;line-height:1.45;margin:0 0 26px;max-width:320px;margin-left:auto;margin-right:auto;}
   .cta-btn{
     background:var(--navy);color:#fff;border:none;padding:16px 44px;border-radius:30px;
@@ -249,12 +257,7 @@
 <div class="page active" id="page-cover">
   <div class="cover-hero">
     <div class="cover-icon">
-      <svg viewBox="0 0 100 100" fill="none">
-        <rect x="10" y="28" width="80" height="52" rx="10" fill="#ffffff" opacity="0.95"/>
-        <rect x="10" y="40" width="80" height="12" fill="#4F3CDB"/>
-        <rect x="18" y="60" width="26" height="8" rx="3" fill="#E4E2F0"/>
-        <rect x="50" y="60" width="16" height="8" rx="3" fill="#E4E2F0"/>
-      </svg>
+      <img src="tarjeta.png" alt="Tarjetas">
     </div>
     <h1 class="cover-title">Tus fechas de corte<br>y pago bajo control</h1>
   </div>
@@ -790,7 +793,8 @@ function closeInstallModal(){
 
 /* ---------- Init ---------- */
 loadState();
-if(Object.keys(cards).length > 0){
+const forceCover = new URLSearchParams(window.location.search).get('cover') === '1';
+if(!forceCover && Object.keys(cards).length > 0){
   goTo('calendar');
 } else {
   goTo('cover');
