@@ -44,7 +44,7 @@
   }
   .menu-btn svg{width:18px;height:18px;color:var(--navy);}
   .menu-panel{
-    position:absolute;top:56px;right:14px;background:#fff;border:1px solid var(--line);
+    position:absolute;top:58px;right:14px;background:#fff;border:1px solid var(--line);
     border-radius:14px;box-shadow:0 8px 24px rgba(30,25,142,.16);overflow:hidden;z-index:20;display:none;min-width:200px;
   }
   .menu-panel.open{display:block;}
@@ -83,13 +83,16 @@
   .header-gradient{
     background-image:url('fondo-portada.jpg');
     background-size:cover;background-position:top center;background-repeat:no-repeat;
-    margin:0 -14px 0;padding:64px 14px 34px;text-align:center;position:relative;
+    margin:0 -14px 0;padding:64px 14px 74px;text-align:center;position:relative;
   }
   .header-gradient h1{font-weight:900;font-size:26px;color:#fff;margin:0 0 6px;}
   .header-gradient .subtitle{font-size:14px;color:rgba(255,255,255,.9);font-weight:500;}
   .header-gradient .subtitle b{font-weight:700;color:#fff;}
   .form-sheet{
     background:#fff;border-radius:36px 36px 0 0;margin:-24px -14px 0;padding:30px 14px 4px;position:relative;z-index:1;
+  }
+  .header-menu-btn{
+    position:absolute;top:16px;right:14px;z-index:5;
   }
   .plain-header h1{font-weight:900;font-size:22px;margin:0 0 4px;color:var(--navy);}
   .plain-header .subtitle{font-size:13px;color:var(--ink-soft);font-weight:500;}
@@ -142,8 +145,8 @@
   /* Card list (calendar page) */
   .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .card-tile{
-    background:#fff;border-radius:14px;padding:14px 14px 15px;
-    border:1px solid var(--line);border-left:4px solid var(--violet);
+    background:#fff;border-radius:14px;padding:14px 14px 15px 18px;
+    border:1px solid var(--line);border-left:8px solid var(--violet);
   }
   .card-name{font-size:14px;font-weight:700;margin:0 0 10px;color:var(--ink);}
   .row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--ink-soft);font-weight:400;}
@@ -244,16 +247,9 @@
 </head>
 <body>
 
-<div class="topbar" id="topbar" style="display:none;">
-  <div style="position:relative;">
-    <button class="menu-btn" onclick="toggleMenu()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-    </button>
-    <div class="menu-panel" id="menuPanel">
-      <div class="menu-item" onclick="goTo('form')">Agregar tarjetas</div>
-      <div class="menu-item" onclick="goTo('calendar')">Ver calendario</div>
-    </div>
-  </div>
+<div class="menu-panel" id="menuPanel">
+  <div class="menu-item" onclick="goTo('form')">Agregar tarjetas</div>
+  <div class="menu-item" onclick="goTo('calendar')">Ver calendario</div>
 </div>
 
 <!-- ================= PORTADA ================= -->
@@ -332,6 +328,11 @@
   <!-- ================= CALENDARIO ================= -->
   <div class="page" id="page-calendar">
     <div class="header-gradient">
+      <div class="header-menu-btn">
+        <button class="menu-btn" onclick="toggleMenu()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
       <h1 id="greeting">¡Hola!</h1>
       <div class="subtitle" id="todayLine">Hoy: —</div>
     </div>
@@ -501,7 +502,6 @@ function loadState(){
 function toggleMenu(){ document.getElementById('menuPanel').classList.toggle('open'); }
 function goTo(page){
   document.getElementById('menuPanel').classList.remove('open');
-  document.getElementById('topbar').style.display = (page==='calendar') ? 'flex' : 'none';
   document.getElementById('page-cover').classList.toggle('active', page==='cover');
   document.getElementById('page-form').classList.toggle('active', page==='form');
   document.getElementById('page-calendar').classList.toggle('active', page==='calendar');
