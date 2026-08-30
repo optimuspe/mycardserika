@@ -83,14 +83,16 @@
   .header-gradient{
     background-image:url('fondo-portada.jpg');
     background-size:cover;background-position:top center;background-repeat:no-repeat;
-    margin:0 -14px 0;padding:64px 14px 74px;text-align:center;position:relative;
+    margin:0 -14px 0;padding:64px 14px 34px;text-align:center;position:relative;
   }
+  .header-gradient.tall{padding-bottom:74px;}
   .header-gradient h1{font-weight:900;font-size:26px;color:#fff;margin:0 0 6px;}
   .header-gradient .subtitle{font-size:14px;color:rgba(255,255,255,.9);font-weight:500;}
   .header-gradient .subtitle b{font-weight:700;color:#fff;}
   .form-sheet{
     background:#fff;border-radius:36px 36px 0 0;margin:-24px -14px 0;padding:30px 14px 4px;position:relative;z-index:1;
   }
+  .cards-section{margin-top:32px;}
   .header-menu-btn{
     position:absolute;top:16px;right:14px;z-index:5;
   }
@@ -270,7 +272,7 @@
 
   <!-- ================= FORMULARIO ================= -->
   <div class="page" id="page-form">
-    <div class="header-gradient">
+    <div class="header-gradient tall">
       <h1>Cuéntanos de tus tarjetas</h1>
       <div class="subtitle">Completa tus datos para armar tu calendario personal</div>
     </div>
@@ -337,7 +339,7 @@
       <div class="subtitle" id="todayLine">Hoy: —</div>
     </div>
 
-    <section>
+    <section class="cards-section">
       <h2>Mis Tarjetas</h2>
       <div class="section-rule"></div>
       <div class="cards-grid" id="cardsGrid"></div>
